@@ -1,5 +1,8 @@
 #include<stdio.h>
 
+const int OPERATION_OK = 1;
+const int OPERATION_ERROR = 0;
+
 struct matrix {
     unsigned long int height;
     unsigned long int width;
