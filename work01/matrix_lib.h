@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 
 const int OPERATION_OK = 1;
 const int OPERATION_ERROR = 0;
