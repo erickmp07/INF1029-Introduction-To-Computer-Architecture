@@ -60,10 +60,6 @@ int main (void)
 			printf("%.0f ", matrixC->rows[i]);
 		}
 	}
-	else
-	{
-		printf("Operation failed.\n");
-	}
 
 	i = scalar_matrix_mult(scalar, matrixC);
 
@@ -80,10 +76,6 @@ int main (void)
 
 			printf("%.0f ", matrixC->rows[i]);
 		}
-	}
-	else
-	{
-		printf("Operation failed.\n");
 	}
 
 	return 0;
