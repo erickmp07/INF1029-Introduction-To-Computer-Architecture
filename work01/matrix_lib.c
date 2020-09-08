@@ -31,9 +31,9 @@ int scalar_matrix_mult(
 }
 
 int matrix_matrix_mult(
-    struct matrix* A,
-    struct matrix* B,
-    struct matrix* C)
+    struct matrix* matrixA,
+    struct matrix* matrixB,
+    struct matrix* matrixC)
 {
     int i;
     int j;
@@ -41,47 +41,47 @@ int matrix_matrix_mult(
 
     float product = 0.0;
 
-    if (A == NULL ||
-        B == NULL ||
-        C == NULL)
+    if (matrixA == NULL ||
+        matrixB == NULL ||
+        matrixC == NULL)
     {
         perror("Matrix * matrix couldn't be done because at least one of matrices is NULL.");
         return OPERATION_ERROR;
     }
 
-    if (A->rows == NULL ||
-        B->rows == NULL ||
-        C->rows == NULL)
+    if (matrixA->rows == NULL ||
+        matrixB->rows == NULL ||
+        matrixC->rows == NULL)
     {
         perror("Matrix * matrix couldn't be done because the rows in at least one of matrices are NULL.");
         return OPERATION_ERROR;
     }
 
-    if (A->width != B->height)
+    if (matrixA->width != matrixB->height)
     {
         perror("Matrix * matrix couldn't be done because number of columns of A is different of number of rows of B.");
         return OPERATION_ERROR;
     }
 
-    if (A->height != C->height ||
-        B->width != C->width)
+    if (matrixA->height != matrixC->height ||
+        matrixB->width != matrixC->width)
     {
         perror("Matrix * matrix couldn't be done because C dimensions are different of A * B result.");
         return OPERATION_ERROR;
     }
 
-    for(i = 0; i < A->height; i++)
+    for(i = 0; i < matrixA->height; i++)
     {
-        for(k = 0; k < B->width; k++)
+        for(k = 0; k < matrixB->width; k++)
         {
             product = 0.0;
 
-            for( j = 0; j < A->width; j++)
+            for( j = 0; j < matrixA->width; j++)
             {
-                product = product + A->rows[i * A->width + j] * B->rows[j * B->width + k];
+                product = product + matrixA->rows[i * matrixA->width + j] * matrixB->rows[j * matrixB->width + k];
             }
 
-            C->rows[B->width * i + k] = product;
+            matrixC->rows[matrixB->width * i + k] = product;
         }
     }
 
