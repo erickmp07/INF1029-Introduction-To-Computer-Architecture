@@ -44,7 +44,7 @@ int main (void)
 
 	i = matrix_matrix_mult(matrixA, matrixB, matrixC);
 
-	if(i)
+	if(i == OPERATION_OK)
 	{
 		printf("Operations was a success! Matrix C:\n");
 
@@ -65,7 +65,7 @@ int main (void)
 
 	i = scalar_matrix_mult(2, matrixC);
 
-	if(i)
+	if(i == OPERATION_OK)
 	{
 		printf("Operations was a success! Matrix C:\n");
 
@@ -83,4 +83,6 @@ int main (void)
 	{
 		printf("Operation failed.\n");
 	}
+
+	return 0;
 }
