@@ -20,10 +20,10 @@ int main (void)
 
 	printf("Matrix A\n");
 
-	for(i=1;i<=matrixA->height*matrixA->width;i++)
+	for(i = 1; i <= matrixA->height * matrixA->width; i++)
 	{
 		printf("%d ", i);
-		if(i%matrixA->width == 0)
+		if(i % matrixA->width == 0)
 		{
 			printf("\n");
 		}
@@ -32,10 +32,10 @@ int main (void)
 
 	printf("Matrix B\n");
 
-	for(i=1;i<=matrixB->height*matrixB->width;i++)
+	for(i = 1; i <= matrixB->height*matrixB->width; i++)
 	{
 		printf("%d ", i);
-		if(i%matrixB->width == 0)
+		if(i % matrixB->width == 0)
 		{
 			printf("\n");
 		}
@@ -48,9 +48,9 @@ int main (void)
 	{
 		printf("Operations was a success! Matrix C:\n");
 
-		for(i=0;i<=matrixC->height*matrixC->width;i++)
+		for(i = 0; i <= matrixC->height * matrixC->width; i++)
 		{
-			if(i%matrixC->width == 0)
+			if(i % matrixC->width == 0)
 			{
 				printf("\n");
 			}
@@ -69,9 +69,9 @@ int main (void)
 	{
 		printf("Operations was a success! Matrix C:\n");
 
-		for(i=0;i<=matrixC->height*matrixC->width;i++)
+		for(i = 0; i <= matrixC->height * matrixC->width; i++)
 		{
-			if(i%matrixC->width == 0)
+			if(i % matrixC->width == 0)
 			{
 				printf("\n");
 			}
