@@ -7,10 +7,9 @@
 			"command": "C:\\MinGW\\bin\\gcc.exe",
 			"args": [
 				"-g",
-				"${workspaceFolder}\\work01\\matrix_lib.c",
-				"${workspaceFolder}\\work01\\teste.c",
+				"${workspaceFolder}\\work01\\*.c",
 				"-o",
-				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+				"${fileDirname}\\teste.exe"
 			],
 			"options": {
 				"cwd": "C:\\MinGW\\bin"
