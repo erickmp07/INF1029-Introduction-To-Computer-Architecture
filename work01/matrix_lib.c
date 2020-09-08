@@ -8,6 +8,9 @@ int scalar_matrix_mult(
     struct matrix *matrix)
 {
     int i;
+    float elapsedTime;
+
+    struct timeval start, stop;
 
     if (matrix == NULL)
     {
@@ -21,10 +24,18 @@ int scalar_matrix_mult(
         return OPERATION_ERROR;
     }
 
+    gettimeofday(&start, NULL);
+
     for (i = 0; i < matrix->height * matrix->width; i++)
     {
         matrix->rows[i] *= scalar_value;
     }
+
+    gettimeofday(&stop, NULL);
+
+    elapsedTime = timedifference_msec(start, stop);
+
+    printf("Scalar * matrix time: %f ms\n", elapsedTime);
 
     return OPERATION_OK;
 }
@@ -38,7 +49,10 @@ int matrix_matrix_mult(
     int j;
     int k;
 
+    float elapsedTime;
     float product = 0.0;
+
+    struct timeval start, stop;
 
     if (matrixA == NULL ||
         matrixB == NULL ||
@@ -69,6 +83,8 @@ int matrix_matrix_mult(
         return OPERATION_ERROR;
     }
 
+    gettimeofday(&start, NULL);
+
     for(i = 0; i < matrixA->height; i++)
     {
         for(k = 0; k < matrixB->width; k++)
@@ -83,6 +99,12 @@ int matrix_matrix_mult(
             matrixC->rows[matrixB->width * i + k] = product;
         }
     }
+
+    gettimeofday(&stop, NULL);
+
+    elapsedTime = timedifference_msec(start, stop);
+
+    printf("Matrix * matrix time: %f ms\n", elapsedTime);
 
     return OPERATION_OK;
 }
