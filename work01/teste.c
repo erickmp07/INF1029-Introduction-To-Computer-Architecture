@@ -18,6 +18,8 @@ int main (void)
 
 	int i;
 
+	float scalar = 2.0;
+
 	printf("Matrix A\n");
 
 	for(i = 1; i <= matrixA->height * matrixA->width; i++)
@@ -63,7 +65,7 @@ int main (void)
 		printf("Operation failed.\n");
 	}
 
-	i = scalar_matrix_mult(2, matrixC);
+	i = scalar_matrix_mult(scalar, matrixC);
 
 	if(i == OPERATION_OK)
 	{
