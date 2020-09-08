@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include "timer.h"
 
 const int OPERATION_OK;
 const int OPERATION_ERROR;
