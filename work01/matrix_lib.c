@@ -1,6 +1,9 @@
 #include "matrix_lib.h"
 #include <stdio.h>
 
+const int OPERATION_OK = 1;
+const int OPERATION_ERROR = 0;
+
 int scalar_matrix_mult(
     float scalar_value,
     struct matrix *matrix)

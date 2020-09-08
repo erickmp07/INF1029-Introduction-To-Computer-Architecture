@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-const int OPERATION_OK = 1;
-const int OPERATION_ERROR = 0;
+const int OPERATION_OK;
+const int OPERATION_ERROR;
 
 struct matrix {
     unsigned long int height;
