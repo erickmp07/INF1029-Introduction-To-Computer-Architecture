@@ -1,5 +1,4 @@
 #include "matrix_lib.h"
-#include "timer.h"
 
 const int OPERATION_OK = 1;
 const int OPERATION_ERROR = 0;
