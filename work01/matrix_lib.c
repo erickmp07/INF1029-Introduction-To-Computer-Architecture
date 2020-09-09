@@ -1,4 +1,5 @@
 #include "matrix_lib.h"
+#include "timer.h"
 
 const int OPERATION_OK = 1;
 const int OPERATION_ERROR = 0;
@@ -33,9 +34,9 @@ int scalar_matrix_mult(
 
     gettimeofday(&stop, NULL);
 
-    //elapsedTime = timedifference_msec(start, stop);
+    elapsedTime = timedifference_msec(start, stop);
 
-    //printf("Scalar * matrix time: %f ms\n", elapsedTime);
+    printf("Scalar * matrix time: %f ms\n", elapsedTime);
 
     return OPERATION_OK;
 }
@@ -102,9 +103,9 @@ int matrix_matrix_mult(
 
     gettimeofday(&stop, NULL);
 
-    //elapsedTime = timedifference_msec(start, stop);
+    elapsedTime = timedifference_msec(start, stop);
 
-    //printf("Matrix * matrix time: %f ms\n", elapsedTime);
+    printf("Matrix * matrix time: %f ms\n", elapsedTime);
 
     return OPERATION_OK;
 }
