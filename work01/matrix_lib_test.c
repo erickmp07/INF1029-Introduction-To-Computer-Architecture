@@ -1,6 +1,91 @@
 #include "matrix_lib.h"
 #include <string.h>
 
+int fillMatrixReadingFile(
+	char* fileName,
+	struct matrix* matrix)
+{
+	int count = 0;
+
+	FILE *file;
+
+    file = fopen(fileName, "r");
+    if(file == NULL)
+    {
+        perror("Error opening file");
+        return -1;
+    }
+
+    while (!feof(file) && (count < matrix->height * matrix->width))
+    {
+        fscanf(file, "%f", &(matrix->rows[count]));
+        count++;
+    }
+
+    return fclose(file);
+}
+
+int fillMatrixWithConstant(
+	float constant,
+	struct matrix* matrix)
+{
+	int i;
+
+	for(i = 0; i < matrix->height * matrix->width; i++)
+	{
+		matrix->rows[i] = constant;
+	}
+
+	return 0;
+}
+
+void printMatrix(
+	char* matrixName,
+	struct matrix* matrix)
+{
+	int i;
+
+	printf(matrixName);
+
+	for(i = 1; i <= matrix->height * matrix->width; i++)
+	{
+		printf("%f\t", matrix->rows[i - 1]);
+		if(i % matrix->width == 0)
+		{
+			printf("\n");
+		}
+	}
+}
+
+int writeResult(
+	char *fileName,
+	struct matrix* matrix)
+{
+	int i;
+
+	FILE *file = fopen(fileName, "wb");
+
+	if (file == NULL)
+	{ 
+		perror("Failed to open file.");
+		return -1;
+	}
+
+	for(i = 0; i < matrix->height * matrix->width; i++)
+	{
+		fprintf(file, "%.2f ",matrix->rows[i]);
+	}
+
+	return fclose(file);
+}
+
+void freeMatrix(
+	struct matrix* matrix)
+{
+	free(matrix->rows);
+	free(matrix);
+}
+
 int main(int argc, char **argv)
 {
 	float scalar = atof(argv[1]);
@@ -12,139 +97,52 @@ int main(int argc, char **argv)
 	matrixB = (struct matrix*)malloc(sizeof(struct matrix));
 	matrixC = (struct matrix*)malloc(sizeof(struct matrix));
 
-	matrixA->height = matA_col;
-	matrixA->width = matA_rows;
-	matrixA->rows = (float *)malloc(matrixA->height*matrixA->width*sizeof(float));
+	matrixA->height = matA_rows;
+	matrixA->width = matA_col;
+	matrixA->rows = (float *)malloc(matrixA->height * matrixA->width * sizeof(float));
 
-	matrixB->height = matB_col;
-	matrixB->width = matB_rows;
-	matrixB->rows = (float *)malloc(matrixB->height*matrixB->width*sizeof(float));
+	matrixB->height = matB_rows;
+	matrixB->width = matB_col;
+	matrixB->rows = (float *)malloc(matrixB->height * matrixB->width * sizeof(float));
 
 	matrixC->height = matrixA->height;
 	matrixC->width = matrixB->width;
-	matrixC->rows = (float *)malloc(matrixC->height*matrixC->width*sizeof(float));
+	matrixC->rows = (float *)malloc(matrixC->height * matrixC->width * sizeof(float));
 
-	int i, count = 0;
+	int i;
 
 	printf("File A: %s \n", matA_file);
 
-	printf("Matrix A\n");
+	fillMatrixReadingFile(matA_file, matrixA);
+	printMatrix("Matrix A\n", matrixA);
 
-	FILE *file;
-    file = fopen(matA_file,"r");
-    if(!file)
-    {
-        perror("Error opening file");
-        return -1;
-    }
+	fillMatrixReadingFile(matB_file, matrixB);
+	printMatrix("Matrix B\n", matrixB);
 
-    while (!feof(file) &&(count < matA_rows * matA_col))
-    {
-        fscanf(file, "%f", &(matrixA->rows[count]));
-        count++;
-    }
-    fclose(file);
-
-	for(i = 1; i <= matrixA->height * matrixA->width; i++)
-	{
-		printf("%f\t", matrixA->rows[i - 1]);
-		if(i % matrixA->width == 0)
-		{
-			printf("\n");
-		}
-	}
-
-	printf("Matrix B\n");
-
-	count = 0;
-
-	file = fopen(matB_file,"r");
-    if(!file)
-    {
-        perror("Error opening file");
-        return -1;
-    }
-
-    while (!feof(file) &&(count < matB_rows * matB_col))
-    {
-        fscanf(file, "%f", &(matrixB->rows[count]));
-        count++;
-    }
-    fclose(file);
-
-	for(i = 1; i <= matrixB->height * matrixB->width; i++)
-	{
-		printf("%f\t", matrixB->rows[i - 1]);
-		if(i % matrixB->width == 0)
-		{
-			printf("\n");
-		}
-	}
-
-	printf("Matrix C\n");
-
-	for(i = 1; i <= matrixC->height * matrixC->width; i++)
-	{
-		printf("%f\t", 0.0);
-		if (i % matrixC->width == 0)
-		{
-			printf("\n");
-		}
-
-		matrixC->rows[i - 1] = 0.0;
-	}
+	fillMatrixWithConstant(0.0, matrixC);
+	printMatrix("Matrix C\n", matrixC);
 
 	printf("\n");
 
 	i = scalar_matrix_mult(scalar, matrixA);
 
-	file=fopen(res1_file,"wb");
-
-	if (!file) 
-		puts("Failed to open file");
-
 	if(i == OPERATION_OK)
 	{
-		printf("Operations was a success! Matrix A:\n");
-
-		for(i = 0; i < matrixA->height * matrixA->width; i++)
-		{
-			if(i % matrixA->width == 0)
-			{
-				printf("\n");
-			}
-
-			fprintf(file, "%.2f ",matrixA->rows[i]);
-			printf("%.0f\t", matrixA->rows[i]);
-		}
+		writeResult(res1_file, matrixA);
 	}
-
-	fclose(file);
 
 	i = matrix_matrix_mult(matrixA, matrixB, matrixC);
 
-	file=fopen(res2_file,"wb");
-
-	if (!file) 
-		puts("Failed to open file");
-
 	if(i == OPERATION_OK)
 	{
-		printf("Operations was a success! Matrix C:\n");
+		//printf("Operations was a success! Matrix C:\n");
 
-		for(i = 0; i < matrixC->height * matrixC->width; i++)
-		{
-			if(i % matrixC->width == 0)
-			{
-				printf("\n");
-			}
-
-			fprintf(file, "%.2f ",matrixC->rows[i]);
-			printf("%.0f\t", matrixC->rows[i]);
-		}
+		writeResult(res2_file, matrixC);
 	}
 
-	fclose(file);
+	freeMatrix(matrixA);
+	freeMatrix(matrixB);
+	freeMatrix(matrixC);
 
 	return 0;
 }
