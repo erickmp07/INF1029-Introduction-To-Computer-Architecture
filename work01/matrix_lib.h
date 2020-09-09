@@ -1,3 +1,6 @@
+#ifndef MATRIX_LIB_H
+#define MATRIX_LIB_H
+
 #include<stdio.h>
 #include<stdlib.h>
 #include "timer.h"
@@ -19,3 +22,5 @@ int matrix_matrix_mult(
     struct matrix *matrixA,
     struct matrix *matrixB,
     struct matrix *matrixC);
+
+#endif
