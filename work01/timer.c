@@ -14,5 +14,5 @@ float timedifference_msec(
     struct timeval t0, 
     struct timeval t1)
 {
-    return (t1.tv_sec - t0.tv_sec) * MSEC_FACTOR + (t1.tv_sec - t0.tv_sec) / MSEC_FACTOR;
+    return (t1.tv_sec - t0.tv_sec) * MSEC_FACTOR + (t1.tv_usec - t0.tv_usec) / MSEC_FACTOR;
 }
