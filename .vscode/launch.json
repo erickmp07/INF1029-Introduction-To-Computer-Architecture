@@ -8,20 +8,20 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/work01/matrix_lib_test",
+            "program": "matrix_lib_test.exe",
             "args": [
                 "5.0",
                 "8",
                 "16",
                 "16", 
                 "8",
-                "floats_256_2.0f.dat",
-                "floats_256_5.0f.dat",
+                "floats1.dat",
+                "floats2.dat",
                 "result1.dat",
                 "result2.dat"
             ],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/work01",
             "environment": [],
             "externalConsole": false
         }
