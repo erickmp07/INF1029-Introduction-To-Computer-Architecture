@@ -6,8 +6,6 @@
 			"label": "C/C++: gcc.exe build active file",
 			"command": "C:\\MinGW\\bin\\gcc.exe",
 			"args": [
-				//"-g",
-				//"${workspaceFolder}\\work01\\*.c",
 				"-o",
 				"${workspaceFolder}\\work01\\matrix_lib_test",
 				"${workspaceFolder}\\work01\\matrix_lib_test.c",
