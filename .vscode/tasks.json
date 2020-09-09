@@ -9,7 +9,10 @@
 				"-g",
 				"${workspaceFolder}\\work01\\*.c",
 				"-o",
-				"${fileDirname}\\teste.exe"
+				"${workspaceFolder}\\work01\\matrix_lib_test",
+				"${workspaceFolder}\\work01\\matrix_lib_test.c",
+				"${workspaceFolder}\\work01\\matrix_lib.c",
+				"${workspaceFolder}\\work01\\timer.c"
 			],
 			"options": {
 				"cwd": "C:\\MinGW\\bin"
