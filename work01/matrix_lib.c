@@ -45,12 +45,13 @@ int matrix_matrix_mult(
     struct matrix* matrixB,
     struct matrix* matrixC)
 {
-    int i;
-    int j;
-    int k;
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int indexLineMatrixA = 0;
+    int indexColumnMatrixB = 0;
 
     float elapsedTime;
-    float product = 0.0;
 
     struct timeval start, stop;
 
@@ -85,18 +86,19 @@ int matrix_matrix_mult(
 
     gettimeofday(&start, NULL);
 
-    for(i = 0; i < matrixA->height; i++)
+    for(i = 0; i < matrixA->height * matrixA->width; i++)
     {
-        for(k = 0; k < matrixB->width; k++)
+        indexLineMatrixA = i / matrixA->width;
+
+        k = i % matrixA->width == 0
+            ? 0
+            : k + 1;
+
+        for(j = k * matrixB->width; j < matrixB->width * (k + 1); j++)
         {
-            product = 0.0;
+            indexColumnMatrixB = j % matrixB->width;
 
-            for( j = 0; j < matrixA->width; j++)
-            {
-                product = product + matrixA->rows[i * matrixA->width + j] * matrixB->rows[j * matrixB->width + k];
-            }
-
-            matrixC->rows[matrixB->width * i + k] = product;
+            matrixC->rows[(indexLineMatrixA * matrixA->width) + indexColumnMatrixB] += matrixA->rows[i] * matrixB->rows[j];
         }
     }
 
