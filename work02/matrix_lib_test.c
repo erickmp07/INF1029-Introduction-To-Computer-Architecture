@@ -99,28 +99,31 @@ int main(int argc, char **argv)
 
 	matrixA->height = matA_rows;
 	matrixA->width = matA_col;
-	matrixA->rows = (float *)malloc(matrixA->height * matrixA->width * sizeof(float));
+	//matrixA->rows = (float *)malloc(matrixA->height * matrixA->width * sizeof(float));
+	matrixA->rows =  (float*)aligned_alloc(32, matrixA->height * matrixA->width * sizeof(float));
 
 	matrixB->height = matB_rows;
 	matrixB->width = matB_col;
-	matrixB->rows = (float *)malloc(matrixB->height * matrixB->width * sizeof(float));
+	//matrixB->rows = (float *)malloc(matrixB->height * matrixB->width * sizeof(float));
+	matrixB->rows =  (float*)aligned_alloc(32, matrixB->height * matrixB->width * sizeof(float));
 
 	matrixC->height = matrixA->height;
 	matrixC->width = matrixB->width;
-	matrixC->rows = (float *)malloc(matrixC->height * matrixC->width * sizeof(float));
+	//matrixC->rows = (float *)malloc(matrixC->height * matrixC->width * sizeof(float));
+	matrixC->rows =  (float*)aligned_alloc(32, matrixC->height * matrixC->width * sizeof(float));
 
 	int i;
 
 	printf("File A: %s \n", matA_file);
 
 	fillMatrixReadingFile(matA_file, matrixA);
-	printMatrix("Matrix A\n", matrixA);
+	//printMatrix("Matrix A\n", matrixA);
 
 	fillMatrixReadingFile(matB_file, matrixB);
-	printMatrix("Matrix B\n", matrixB);
+	//printMatrix("Matrix B\n", matrixB);
 
 	fillMatrixWithConstant(0.0, matrixC);
-	printMatrix("Matrix C\n", matrixC);
+	//printMatrix("Matrix C\n", matrixC);
 
 	printf("\n");
 

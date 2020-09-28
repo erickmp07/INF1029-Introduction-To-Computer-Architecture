@@ -30,11 +30,11 @@ int scalar_matrix_mult(
 
     for (i = 0; i < matrix->height * matrix->width; i=i+8)
     {
-    	vector = _mm256_setr_ps(matrix->rows[i], matrix->rows[i + 1], matrix->rows[i + 2], matrix->rows[i + 3], matrix->rows[i + 4], matrix->rows[i + 5], matrix->rows[i + 6], matrix->rows[i + 7]);
+    	vector = _mm256_load_ps(&matrix->rows[i]);
 
     	scalar_vector = _mm256_setr_ps(scalar_value, scalar_value, scalar_value, scalar_value, scalar_value, scalar_value, scalar_value, scalar_value);
 
-    	result = _mm256_mullo_ps(vector, scalar_vector);
+    	result = _mm256_mul_ps(vector, scalar_vector);
 
         //matrix->rows[i] *= scalar_value;
 
