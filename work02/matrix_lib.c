@@ -63,8 +63,11 @@ int matrix_matrix_mult(
     int i = 0;
     int j = 0;
     int k = 0;
+    int z;
     int indexLineMatrixA = 0;
     int indexColumnMatrixB = 0;
+    float* f;
+    __m256 frst_vector, scnd_vector, result;
 
     float elapsedTime;
 
@@ -109,11 +112,20 @@ int matrix_matrix_mult(
             ? 0
             : k + 1;
 
-        for(j = k * matrixB->width; j < matrixB->width * (k + 1); j++)
+        frst_vector = _mm256_setr_ps(matrixA->rows[i], matrixA->rows[i], matrixA->rows[i], matrixA->rows[i], matrixA->rows[i], matrixA->rows[i], matrixA->rows[i], matrixA->rows[i]);
+        for(j = k * matrixB->width; j < matrixB->width * (k + 1); j +=8)
         {
-            indexColumnMatrixB = j % matrixB->width;
+    		scnd_vector = _mm256_load_ps(&matrixB->rows[j]);
 
-            matrixC->rows[(indexLineMatrixA * matrixA->width) + indexColumnMatrixB] += matrixA->rows[i] * matrixB->rows[j];
+    		result = _mm256_mul_ps(frst_vector, scnd_vector);
+
+            f = (float*)&result;
+
+    		for(z = 0; z < 8; z++)
+    		{
+            	indexColumnMatrixB = (j - 8 + z) % matrixB->width;
+            	matrixC->rows[(indexLineMatrixA * matrixA->width) + indexColumnMatrixB] += f[z];
+    		}
         }
     }
 

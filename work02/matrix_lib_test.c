@@ -49,10 +49,14 @@ void printMatrix(
 
 	for(i = 1; i <= matrix->height * matrix->width; i++)
 	{
-		printf("%f\t", matrix->rows[i - 1]);
-		if(i % matrix->width == 0)
+		printf("%.2f ", matrix->rows[i - 1]);
+		/*if(i % matrix->width == 0)
 		{
 			printf("\n");
+		}*/
+		if(i == 1033)
+		{
+			break;
 		}
 	}
 }
@@ -128,6 +132,7 @@ int main(int argc, char **argv)
 	printf("\n");
 
 	i = scalar_matrix_mult(scalar, matrixA);
+	//printMatrix("Matrix A\n", matrixA);
 
 	if(i == OPERATION_OK)
 	{

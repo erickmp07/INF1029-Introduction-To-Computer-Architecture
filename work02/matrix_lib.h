@@ -1,9 +1,9 @@
 #ifndef MATRIX_LIB_H
 #define MATRIX_LIB_H
 
+#include <immintrin.h>
 #include<stdio.h>
 #include<stdlib.h>
-#include <immintrin.h>
 #include "timer.h"
 
 const int OPERATION_OK;
