@@ -54,8 +54,9 @@ void printMatrix(
 		{
 			printf("\n");
 		}*/
-		if(i == 1033)
+		if(i == 256)
 		{
+			printf(" Ops. Max limit of print reached.\n\n");
 			break;
 		}
 	}
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
 	printf("\n");
 
 	i = scalar_matrix_mult(scalar, matrixA);
-	//printMatrix("Matrix A\n", matrixA);
+	printMatrix("Matrix A\n", matrixA);
 
 	if(i == OPERATION_OK)
 	{
@@ -140,6 +141,7 @@ int main(int argc, char **argv)
 	}
 
 	i = matrix_matrix_mult(matrixA, matrixB, matrixC);
+	printMatrix("Matrix C\n", matrixC);
 
 	if(i == OPERATION_OK)
 	{
