@@ -1,14 +1,14 @@
-#include "matrix_lib.h"
 #include <immintrin.h>
+
+struct matrix {
+	unsigned long int height;
+	unsigned long int width;
+	float *rows;
+};
 
 int scalar_matrix_mult(float scalar_value, struct matrix *matrix) {
   unsigned long int i;
   unsigned long int N;
-  float elapsedTime, *f;
-
-  struct timeval start, stop;
-
-  gettimeofday(&start, NULL);
 
   /* Check the numbers of the elements of the matrix */
   N = matrix->height * matrix->width;
@@ -20,22 +20,12 @@ int scalar_matrix_mult(float scalar_value, struct matrix *matrix) {
         matrix->rows[i] = matrix->rows[i] * scalar_value;
   }
 
-  gettimeofday(&stop, NULL);
-
-  elapsedTime = timedifference_msec(start, stop);
-
-  printf("Scalar * matrix time: %f ms\n", elapsedTime);
-
   return 1;
 }
 
 int matrix_matrix_mult(struct matrix *a, struct matrix *b, struct matrix *c) {
-  unsigned long int NA, NB, NC, i, j, k, pos;
-  float elapsedTime, *f;
-
-  struct timeval start, stop;
-
-  gettimeofday(&start, NULL);
+  unsigned long int NA, NB, NC, c_line, a_col, b_col;
+  float *first_c_i_j, *next_a_i_j, *next_b_i_j, *next_c_i_j;
 
   /* Check the numbers of the elements of the matrix */
   NA = a->height * a->width;
@@ -52,25 +42,19 @@ int matrix_matrix_mult(struct matrix *a, struct matrix *b, struct matrix *c) {
        (c->height != a->height) ||
        (c->width != b->width) ) return 0;
 
-  for (pos = 0; pos <  NC; ++pos) {
-        i = pos / c->width;
-        j = pos % c->width;
-
-        c->rows[pos] = 0;
-
-        /* Proccess the product between each element of the row of matrix a  */
-        /* and each element of the colum of matrix b and accumulates the sum */
-        /* of the product on the correspondent element of matrix c.          */
-        for (k = 0; k < a->width; ++k) {
-                c->rows[pos] += a->rows[(i * a->width) + k] * b->rows[(k * b->height) + j];
-        }
- }
-
-  gettimeofday(&stop, NULL);
-
-  elapsedTime = timedifference_msec(start, stop);
-
-  printf("Matrix * matrix time: %f ms\n", elapsedTime);
+  for (c_line = 0; c_line < c->height; ++c_line) {
+	first_c_i_j = c->rows + (c_line * c->width);
+	next_a_i_j = a->rows + (c_line * a->width);
+	next_b_i_j = b->rows;
+	for (a_col = 0; a_col < a->width; ++a_col, ++next_a_i_j) { 
+		next_c_i_j = first_c_i_j;
+		for (b_col = 0; b_col < b->width; ++b_col, ++next_b_i_j, ++next_c_i_j) {
+			if (a_col == 0) *(next_c_i_j) = 0.0f;
+			*(next_c_i_j) += *(next_a_i_j) * *(next_b_i_j);
+		}
+			
+	}
+  }
 
   return 1;
 }
