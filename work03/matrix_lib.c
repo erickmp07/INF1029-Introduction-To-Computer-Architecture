@@ -122,18 +122,18 @@ void *matrix_matrix_mult_avx_thread(void *args)
 	float *nxt_b;
 	float *nxt_c;
 
-	struct matrix_matrix_mult_thread_args *thread_args;
-	thread_args = (struct matrix_matrix_mult_thread_args *)args;
+	struct matrix_matrix_thread_args *thread_args;
+	thread_args = (struct matrix_matrix_thread_args *)args;
 
 	for (i = thread_args->begin, nxt_a = &thread_args->A->rows[thread_args->begin];
-		 i < &thread_args->end;
+		 i < thread_args->end;
 		 i += 1)
 	{
 		/* Set nxt_b to the begining of matrixB */
-		nxt_b = &thread_args->B->rows;
+		nxt_b = thread_args->B->rows;
 
 		for (j = 0;
-			 j < &thread_args->A->width;
+			 j < thread_args->A->width;
 			 j += 1, nxt_a += 1)
 		{
 			/* Initialize the scalar vector with the next scalar value */
@@ -144,8 +144,8 @@ void *matrix_matrix_mult_avx_thread(void *args)
 		 * a row of matrixB, 8 elements at a time, and add the result to the 
 		 * respective elements of a row of matrixC, 8 elements at a time.
 		 */
-			for (k = 0, nxt_c = &thread_args->C->rows[thread_args->begin] + (&thread_args->C->width * i);
-				 k < &thread_args->B->width;
+			for (k = 0, nxt_c = &thread_args->C->rows[thread_args->begin] + (thread_args->C->width * i);
+				 k < thread_args->B->width;
 				 k += VECTOR_SIZE, nxt_b += VECTOR_SIZE, nxt_c += VECTOR_SIZE)
 			{
 				/* Load part of b row (size of vector) */
@@ -180,7 +180,7 @@ int matrix_matrix_mult(struct matrix *a, struct matrix *b, struct matrix *c)
 	pthread_t threads[global_num_thread];
 	pthread_attr_t attr;
 	struct matrix_matrix_thread_args thread_args[global_num_thread];
-	int matrix_size = c->height * C->width, result;
+	int matrix_size = c->height * c->width, result;
 	void *status;
 
 	unsigned long int NA, NB, NC, i;
