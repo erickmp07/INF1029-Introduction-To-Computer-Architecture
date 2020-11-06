@@ -11,7 +11,8 @@ float scalar_value = 0.0f;
 
 struct matrix matrixA, matrixB, matrixC;
 
-int store_matrix(struct matrix *matrix, char *filename) {
+int store_matrix(struct matrix *matrix, char *filename)
+{
   unsigned long int i = 0;
   unsigned long int N = 0;
   FILE *fd = NULL;
@@ -20,85 +21,91 @@ int store_matrix(struct matrix *matrix, char *filename) {
   N = matrix->height * matrix->width;
 
   /* Check the integrity of the matrix */
-  if (N == 0 || matrix->rows == NULL) return 0;
+  if (N == 0 || matrix->rows == NULL)
+    return 0;
 
   /* Try to open file of floats */
-  if ((fd = fopen(filename, "wb")) == NULL) {
+  if ((fd = fopen(filename, "wb")) == NULL)
+  {
     printf("Unable to open file %s\n", filename);
     return 0;
   }
 
-  float *nxt_a = matrix->rows; 
+  float *nxt_a = matrix->rows;
 
-  for ( i = 0;
-	i < N; 
-	i += 8, nxt_a += 8) {
-
-	if (fwrite(nxt_a, sizeof(float), 8, fd) != 8) {
-            printf("Error writing to file %s: short write (less than 8 floats)\n", filename);
-            return 0;
-	}
+  for (i = 0;
+       i < N;
+       i += 8, nxt_a += 8)
+  {
+    if (fwrite(nxt_a, sizeof(float), 8, fd) != 8)
+    {
+      printf("Error writing to file %s: short write (less than 8 floats)\n", filename);
+      return 0;
+    }
   }
 
-  if (fd != NULL) fclose(fd);
+  if (fd != NULL)
+    fclose(fd);
 
   return 1;
 }
 
-int load_matrix(struct matrix *matrix, char *filename) {
- //  unsigned long int i = 0;
- //  unsigned long int N = 0;
- //  FILE *fd = NULL;
+int load_matrix(struct matrix *matrix, char *filename)
+{
+  //  unsigned long int i = 0;
+  //  unsigned long int N = 0;
+  //  FILE *fd = NULL;
 
- //  /* Check the numbers of the elements of the matrix */
- //  N = matrix->height * matrix->width;
+  //  /* Check the numbers of the elements of the matrix */
+  //  N = matrix->height * matrix->width;
 
- //  /* Check the integrity of the matrix */
- //  if (N == 0 || matrix->rows == NULL) return 0;
+  //  /* Check the integrity of the matrix */
+  //  if (N == 0 || matrix->rows == NULL) return 0;
 
- //  /* Try to open file of floats */
- //  if ((fd = fopen(filename, "rb")) == NULL) {
- //    printf("Unable to open file %s\n", filename);
- //    return 0;
- //  }
+  //  /* Try to open file of floats */
+  //  if ((fd = fopen(filename, "rb")) == NULL) {
+  //    printf("Unable to open file %s\n", filename);
+  //    return 0;
+  //  }
 
- //  float *nxt_a = matrix->rows; 
+  //  float *nxt_a = matrix->rows;
 
- //  for ( i = 0;
-	// i < N; 
-	// i += 8, nxt_a += 8) {
+  //  for ( i = 0;
+  // i < N;
+  // i += 8, nxt_a += 8) {
 
-	// if (fread(nxt_a, sizeof(float), 8, fd) != 8) {
- //            printf("Error reading from file %s: short read (less than 8 floats)\n", filename);
- //            return 0;
-	// }
- //  }
+  // if (fread(nxt_a, sizeof(float), 8, fd) != 8) {
+  //            printf("Error reading from file %s: short read (less than 8 floats)\n", filename);
+  //            return 0;
+  // }
+  //  }
 
- //  if (fd != NULL) fclose(fd);
+  //  if (fd != NULL) fclose(fd);
 
- //  return 1;
+  //  return 1;
   int count = 0;
 
   FILE *file;
 
-    file = fopen(filename, "r");
-    if(file == NULL)
-    {
-        perror("Error opening file");
-        return -1;
-    }
+  file = fopen(filename, "r");
+  if (file == NULL)
+  {
+    perror("Error opening file");
+    return -1;
+  }
 
-    while (!feof(file) && (count < matrix->height * matrix->width))
-    {
-        fscanf(file, "%f", &(matrix->rows[count]));
-        count++;
-    }
+  while (!feof(file) && (count < matrix->height * matrix->width))
+  {
+    fscanf(file, "%f", &(matrix->rows[count]));
+    count++;
+  }
 
-    fclose(file);
-    return 1;
+  fclose(file);
+  return 1;
 }
 
-int initialize_matrix(struct matrix *matrix, float value, float inc) {
+int initialize_matrix(struct matrix *matrix, float value, float inc)
+{
   unsigned long int i;
   unsigned long int N;
   unsigned long int nxt_inc;
@@ -107,30 +114,34 @@ int initialize_matrix(struct matrix *matrix, float value, float inc) {
   N = matrix->height * matrix->width;
 
   /* Check the integrity of the matrix */
-  if (N == 0 || matrix->rows == NULL) return 0;
+  if (N == 0 || matrix->rows == NULL)
+    return 0;
 
-  float *nxt_a = matrix->rows; 
-  for ( i = 0, nxt_inc = matrix->width; 
-	i < N; 
-	i += 8, nxt_a += 8) {
+  float *nxt_a = matrix->rows;
+  for (i = 0, nxt_inc = matrix->width;
+       i < N;
+       i += 8, nxt_a += 8)
+  {
 
-	  /* Check if it is time to increse value */
-	  if (i == nxt_inc) {
-		nxt_inc += matrix->width;
-		value += inc;
-	  }
+    /* Check if it is time to increse value */
+    if (i == nxt_inc)
+    {
+      nxt_inc += matrix->width;
+      value += inc;
+    }
 
-  	  /* Initialize main vector */
-  	  __m256 vec_a = _mm256_set1_ps(value);
+    /* Initialize main vector */
+    __m256 vec_a = _mm256_set1_ps(value);
 
-	  /* Store the elements of the vectors in the arrays */
-	  _mm256_store_ps(nxt_a, vec_a);
+    /* Store the elements of the vectors in the arrays */
+    _mm256_store_ps(nxt_a, vec_a);
   }
 
   return 1;
 }
 
-int print_matrix(struct matrix *matrix) {
+int print_matrix(struct matrix *matrix)
+{
   unsigned long int i;
   unsigned long int N;
   unsigned long int nxt_newLine;
@@ -139,28 +150,33 @@ int print_matrix(struct matrix *matrix) {
   N = matrix->height * matrix->width;
 
   /* Check the integrity of the matrix */
-  if (N == 0 || matrix->rows == NULL) return 0;
+  if (N == 0 || matrix->rows == NULL)
+    return 0;
 
   /* Initialize new line controol */
   nxt_newLine = matrix->width - 1;
 
   /* Print matrix elements */
-  for (i = 0; i < N; i++) {
-     printf("%5.1f ", matrix->rows[i]);
-     if (i == nxt_newLine) {
-	printf("\n");
-	nxt_newLine += matrix->width;
-     }
-     if (i == 255) {
-        printf("Ooops...256 printing limit found...skipping printing...\n");
-        break;
-     }
+  for (i = 0; i < N; i++)
+  {
+    printf("%5.1f ", matrix->rows[i]);
+    if (i == nxt_newLine)
+    {
+      printf("\n");
+      nxt_newLine += matrix->width;
+    }
+    if (i == 255)
+    {
+      printf("Ooops...256 printing limit found...skipping printing...\n");
+      break;
+    }
   }
 
   return 1;
 }
 
-int check_errors(struct matrix *matrix, float scalar_value) {
+int check_errors(struct matrix *matrix, float scalar_value)
+{
   unsigned long int i;
   unsigned long int N;
 
@@ -168,19 +184,21 @@ int check_errors(struct matrix *matrix, float scalar_value) {
   N = matrix->height * matrix->width;
 
   /* Check the integrity of the matrix */
-  if (N == 0 || matrix->rows == NULL) return 0;
+  if (N == 0 || matrix->rows == NULL)
+    return 0;
 
   /* Check for errors (all values should be equal to scalar_value) */
   float maxError = 0.0f;
   float diffError = 0.0f;
   for (i = 0; i < N; i++)
-    maxError = (maxError > (diffError=fabs(matrix->rows[i]-scalar_value)))? maxError : diffError;
+    maxError = (maxError > (diffError = fabs(matrix->rows[i] - scalar_value))) ? maxError : diffError;
   printf("Max error: %f\n", maxError);
 
   return 1;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   unsigned long int DimA_M, DimA_N, DimB_M, DimB_N, n_threads;
   char *matrixA_filename, *matrixB_filename, *result1_filename, *result2_filename;
   char *eptr = NULL;
@@ -190,13 +208,16 @@ int main(int argc, char *argv[]) {
   gettimeofday(&overall_t1, NULL);
 
   // Check arguments
-  if (argc != 11) {
-        printf("Usage: %s <scalar_value> <DimA_M> <DimA_N> <DimB_M> <DimB_N> <n_threads> <matrixA_filename> <matrixB_filename> <result1_filename> <result2_filename>\n", argv[0]);
-        return 0;
-  } else {
-        //printf("Number of args: %d\n", argc);
-        //for (int i=0; i<argc; ++i)
-         //       printf("argv[%d] = %s\n", i, argv[i]);
+  if (argc != 11)
+  {
+    printf("Usage: %s <scalar_value> <DimA_M> <DimA_N> <DimB_M> <DimB_N> <n_threads> <matrixA_filename> <matrixB_filename> <result1_filename> <result2_filename>\n", argv[0]);
+    return 0;
+  }
+  else
+  {
+    //printf("Number of args: %d\n", argc);
+    //for (int i=0; i<argc; ++i)
+    //       printf("argv[%d] = %s\n", i, argv[i]);
   }
 
   // Convert arguments
@@ -211,31 +232,34 @@ int main(int argc, char *argv[]) {
   result1_filename = argv[9];
   result2_filename = argv[10];
 
-  if ((scalar_value == 0.0f) || (DimA_M == 0) || (DimA_N == 0) || (DimB_M == 0) || (DimB_N == 0)) {
-        printf("%s: erro na conversao do argumento: errno = %d\n", argv[0], errno);
+  if ((scalar_value == 0.0f) || (DimA_M == 0) || (DimA_N == 0) || (DimB_M == 0) || (DimB_N == 0))
+  {
+    printf("%s: erro na conversao do argumento: errno = %d\n", argv[0], errno);
 
-        /* If a conversion error occurred, display a message and exit */
-        if (errno == EINVAL)
-        {
-            printf("Conversion error occurred: %d\n", errno);
-            return 1;
-        }
+    /* If a conversion error occurred, display a message and exit */
+    if (errno == EINVAL)
+    {
+      printf("Conversion error occurred: %d\n", errno);
+      return 1;
+    }
 
-        /* If the value provided was out of range, display a warning message */
-        if (errno == ERANGE) {
-            printf("The value provided was out of rangei: %d\n", errno);
-            return 1;
-	}
+    /* If the value provided was out of range, display a warning message */
+    if (errno == ERANGE)
+    {
+      printf("The value provided was out of rangei: %d\n", errno);
+      return 1;
+    }
   }
 
   /* Allocate the arrays of the four matrixes */
-  float *a=  (float*)aligned_alloc(32, DimA_M*DimA_N*sizeof(float));
-  float *b = (float*)aligned_alloc(32, DimB_M*DimB_N*sizeof(float));
-  float *c = (float*)aligned_alloc(32, DimA_M*DimB_N*sizeof(float));
+  float *a = (float *)aligned_alloc(32, DimA_M * DimA_N * sizeof(float));
+  float *b = (float *)aligned_alloc(32, DimB_M * DimB_N * sizeof(float));
+  float *c = (float *)aligned_alloc(32, DimA_M * DimB_N * sizeof(float));
 
-  if ((a == NULL) || (b == NULL) || (c == NULL)) {
-	printf("%s: array allocation problem.", argv[0]);
-	return 1;
+  if ((a == NULL) || (b == NULL) || (c == NULL))
+  {
+    printf("%s: array allocation problem.", argv[0]);
+    return 1;
   }
 
   /* Initialize the three matrixes */
@@ -243,9 +267,10 @@ int main(int argc, char *argv[]) {
   matrixA.width = DimA_N;
   matrixA.rows = a;
   //if (!initialize_matrix(&matrixA, 5.0f, 0.0f)) {
-  if (!load_matrix(&matrixA, matrixA_filename)) {
-	printf("%s: matrixA initialization problem.", argv[0]);
-	return 1;
+  if (!load_matrix(&matrixA, matrixA_filename))
+  {
+    printf("%s: matrixA initialization problem.", argv[0]);
+    return 1;
   }
 
   /* Print matrix */
@@ -256,9 +281,10 @@ int main(int argc, char *argv[]) {
   matrixB.width = DimB_N;
   matrixB.rows = b;
   //if (!initialize_matrix(&matrixB, 1.0f, 0.0f)) {
-  if (!load_matrix(&matrixB, matrixB_filename)) {
-	printf("%s: matrixB initialization problem.", argv[0]);
-	return 1;
+  if (!load_matrix(&matrixB, matrixB_filename))
+  {
+    printf("%s: matrixB initialization problem.", argv[0]);
+    return 1;
   }
 
   /* Print matrix */
@@ -268,10 +294,10 @@ int main(int argc, char *argv[]) {
   matrixC.height = DimA_M;
   matrixC.width = DimB_N;
   matrixC.rows = c;
-//  if (!initialize_matrix(&matrixC, 0.0f, 0.0f)) {
-//	printf("%s: matrixC initialization problem.", argv[0]);
-//	return 1;
-//  }
+  //  if (!initialize_matrix(&matrixC, 0.0f, 0.0f)) {
+  //	printf("%s: matrixC initialization problem.", argv[0]);
+  //	return 1;
+  //  }
 
   /* Print matrix */
   printf("---------- Matrix C ----------\n");
@@ -281,11 +307,12 @@ int main(int argc, char *argv[]) {
   set_number_threads(n_threads);
 
   /* Scalar product of matrix A */
-  printf("Executing scalar_matrix_mult(%5.1f, matrixA)...\n",scalar_value);
+  printf("Executing scalar_matrix_mult(%5.1f, matrixA)...\n", scalar_value);
   gettimeofday(&start, NULL);
-  if (!scalar_matrix_mult(scalar_value, &matrixA)) {
-	printf("%s: scalar_matrix_mult problem.", argv[0]);
-	return 1;
+  if (!scalar_matrix_mult(scalar_value, &matrixA))
+  {
+    printf("%s: scalar_matrix_mult problem.", argv[0]);
+    return 1;
   }
   gettimeofday(&stop, NULL);
   printf("%f ms\n", timedifference_msec(start, stop));
@@ -296,9 +323,10 @@ int main(int argc, char *argv[]) {
 
   /* Write first result */
   printf("Writing first result: %s...\n", result1_filename);
-  if (!store_matrix(&matrixA, result1_filename)) {
-	printf("%s: failed to write first result to file.", argv[0]);
-	return 1;
+  if (!store_matrix(&matrixA, result1_filename))
+  {
+    printf("%s: failed to write first result to file.", argv[0]);
+    return 1;
   }
 
   /* Check for errors */
@@ -307,9 +335,10 @@ int main(int argc, char *argv[]) {
   /* Calculate the product between matrix A and matrix B */
   printf("Executing matrix_matrix_mult(matrixA, mattrixB, matrixC)...\n");
   gettimeofday(&start, NULL);
-  if (!matrix_matrix_mult(&matrixA, &matrixB, &matrixC)) {
-	printf("%s: matrix_matrix_mult problem.", argv[0]);
-	return 1;
+  if (!matrix_matrix_mult(&matrixA, &matrixB, &matrixC))
+  {
+    printf("%s: matrix_matrix_mult problem.", argv[0]);
+    return 1;
   }
   gettimeofday(&stop, NULL);
   printf("%f ms\n", timedifference_msec(start, stop));
@@ -320,9 +349,10 @@ int main(int argc, char *argv[]) {
 
   /* Write second result */
   printf("Writing second result: %s...\n", result2_filename);
-  if (!store_matrix(&matrixC, result2_filename)) {
-	printf("%s: failed to write second result to file.", argv[0]);
-	return 1;
+  if (!store_matrix(&matrixC, result2_filename))
+  {
+    printf("%s: failed to write second result to file.", argv[0]);
+    return 1;
   }
 
   /* Check foor errors */
