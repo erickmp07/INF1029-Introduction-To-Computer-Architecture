@@ -132,7 +132,7 @@ int check_errors(struct matrix *matrix, float scalar_value)
 
 int main(int argc, char *argv[])
 {
-  unsigned long int DimA_M, DimA_N, DimB_M, DimB_N, n_threads;
+  unsigned long int DimA_M, DimA_N, DimB_M, DimB_N, n_threads, n_blocks;
   char *matrixA_filename, *matrixB_filename, *result1_filename, *result2_filename;
   char *eptr = NULL;
   struct timeval overall_t1, overall_t2, start, stop;
@@ -141,16 +141,10 @@ int main(int argc, char *argv[])
   gettimeofday(&overall_t1, NULL);
 
   // Check arguments
-  if (argc != 11)
+  if (argc != 12)
   {
-    printf("Usage: %s <scalar_value> <DimA_M> <DimA_N> <DimB_M> <DimB_N> <n_threads> <matrixA_filename> <matrixB_filename> <result1_filename> <result2_filename>\n", argv[0]);
+    printf("Usage: %s <scalar_value> <DimA_M> <DimA_N> <DimB_M> <DimB_N> <n_threads> <n_blocks> <matrixA_filename> <matrixB_filename> <result1_filename> <result2_filename>\n", argv[0]);
     return 0;
-  }
-  else
-  {
-    //printf("Number of args: %d\n", argc);
-    //for (int i=0; i<argc; ++i)
-    //       printf("argv[%d] = %s\n", i, argv[i]);
   }
 
   // Convert arguments
@@ -160,10 +154,11 @@ int main(int argc, char *argv[])
   DimB_M = strtol(argv[4], &eptr, 10);
   DimB_N = strtol(argv[5], &eptr, 10);
   n_threads = strtol(argv[6], &eptr, 10);
-  matrixA_filename = argv[7];
-  matrixB_filename = argv[8];
-  result1_filename = argv[9];
-  result2_filename = argv[10];
+  n_blocks = strtol(argv[7], &eptr, 10);
+  matrixA_filename = argv[8];
+  matrixB_filename = argv[9];
+  result1_filename = argv[10];
+  result2_filename = argv[11];
 
   if ((scalar_value == 0.0f) || (DimA_M == 0) || (DimA_N == 0) || (DimB_M == 0) || (DimB_N == 0))
   {
