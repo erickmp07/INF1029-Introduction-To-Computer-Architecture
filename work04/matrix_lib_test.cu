@@ -53,7 +53,7 @@ int store_matrix(struct matrix *matrix, char *filename)
   return 1;
 }
 
-int aloc_matrix(struct matrix* m, int height, int width)
+int alloc_matrix(struct matrix* m, int height, int width)
 {
   cudaError_t cudaError;
   m = (struct matrix*) malloc(sizeof(int) * 2 + sizeof(float) * (height*width) + (DATASET_SIZE * sizeof(float)));
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
   }
 
   /* Initialize the three matrixes */
-  aloc_matrix(&matrixA, DimA_M, DimA_N);
+  alloc_matrix(&matrixA, DimA_M, DimA_N);
   //if (!initialize_matrix(&matrixA, 5.0f, 0.0f)) {
   if (!load_matrix(&matrixA, matrixA_filename))
   {
@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
   printf("---------- Matrix A ----------\n");
   print_matrix(&matrixA);
 
-  aloc_matrix(&matrixB, DimB_M, DimB_N);
+  alloc_matrix(&matrixB, DimB_M, DimB_N);
   //if (!initialize_matrix(&matrixB, 1.0f, 0.0f)) {
   if (!load_matrix(&matrixB, matrixB_filename))
   {
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
   printf("---------- Matrix B ----------\n");
   print_matrix(&matrixB);
 
-  aloc_matrix(&matrixC, DimA_M, DimB_N);
+  alloc_matrix(&matrixC, DimA_M, DimB_N);
   if (!initialize_matrix(&matrixC, 0.0f, 0.0f)) 
   {
     printf("%s: matrixC initialization problem.", argv[0]);
