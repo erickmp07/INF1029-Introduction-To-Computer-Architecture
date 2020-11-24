@@ -5,6 +5,9 @@
 #include <string.h>
 #include <errno.h>
 #include <cuda_runtime.h>
+extern "C" {
+  #include "timer.h"
+}
 #include "matrix_lib.h"
 
 float scalar_value = 0.0f;
