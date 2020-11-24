@@ -195,13 +195,8 @@ int main(int argc, char *argv[])
   if (argc != 12)
   {
     printf("Usage: %s <scalar_value> <DimA_M> <DimA_N> <DimB_M> <DimB_N> <n_threads> <n_blocks> <matrixA_filename> <matrixB_filename> <result1_filename> <result2_filename>\n", argv[0]);
+    
     return 0;
-  }
-  else
-  {
-    //printf("Number of args: %d\n", argc);
-    //for (int i=0; i<argc; ++i)
-    //       printf("argv[%d] = %s\n", i, argv[i]);
   }
 
   // Convert arguments
