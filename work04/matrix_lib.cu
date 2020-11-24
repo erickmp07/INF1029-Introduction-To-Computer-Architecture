@@ -1,5 +1,6 @@
 #include "matrix_lib.h"
 
+<<<<<<< HEAD
 int global_n_block = 4096;
 int global_n_thread = 256;
 cudaError_t cudaError;
@@ -15,6 +16,15 @@ void scalar_aux(int fim, float *rows, float scalar_value)
     rows[i] = rows[i] * scalar_value;
   }
 }
+=======
+#define THREADS_PER_BLOCK_DEFAULT 256
+#define THREADS_PER_BLOCK 1024
+#define MAX_BLOCKS_PER_GRID_DEFAULT 4096
+#define MAX_BLOCKS_PER_GRID 65535
+
+int blockSize = THREADS_PER_BLOCK_DEFAULT;
+int numBlocks = MAX_BLOCKS_PER_GRID_DEFAULT;
+>>>>>>> 053bf0d4fd948c9b9efcd6b45f147065d8082f63
 
 int scalar_matrix_mult(float scalar_value, struct matrix *matrix)
 {
@@ -70,9 +80,20 @@ int matrix_matrix_mult(struct matrix *matrixA, struct matrix *matrixB, struct ma
 
 int set_grid_size(int threads_per_block, int max_blocks_per_grid)
 {
+<<<<<<< HEAD
   if(threads_per_block < MAX_THREAD && max_blocks_per_grid < MAX_BLOCK){
     global_n_block = threads_per_block;
     global_n_thread = max_blocks_per_grid;
+=======
+    if (threads_per_block > THREADS_PER_BLOCK || 
+        max_blocks_per_grid > MAX_BLOCKS_PER_GRID)
+    {
+        return ERRO;
+    }
+
+    blockSize = threads_per_block;
+    numBlocks = max_blocks_per_grid;
+>>>>>>> 053bf0d4fd948c9b9efcd6b45f147065d8082f63
 
     return SUCESSO;
   }
