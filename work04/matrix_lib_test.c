@@ -11,78 +11,8 @@ float scalar_value = 0.0f;
 
 struct matrix matrixA, matrixB, matrixC;
 
-int store_matrix(struct matrix *matrix, char *filename)
-{
-  unsigned long int i = 0;
-  unsigned long int N = 0;
-  FILE *fd = NULL;
-
-  /* Check the numbers of the elements of the matrix */
-  N = matrix->height * matrix->width;
-
-  /* Check the integrity of the matrix */
-  if (N == 0 || matrix->rows == NULL)
-    return 0;
-
-  /* Try to open file of floats */
-  if ((fd = fopen(filename, "wb")) == NULL)
-  {
-    printf("Unable to open file %s\n", filename);
-    return 0;
-  }
-
-  float *nxt_a = matrix->rows;
-
-  for (i = 0;
-       i < N;
-       i += 8, nxt_a += 8)
-  {
-    if (fwrite(nxt_a, sizeof(float), 8, fd) != 8)
-    {
-      printf("Error writing to file %s: short write (less than 8 floats)\n", filename);
-      return 0;
-    }
-  }
-
-  if (fd != NULL)
-    fclose(fd);
-
-  return 1;
-}
-
 int load_matrix(struct matrix *matrix, char *filename)
 {
-  //  unsigned long int i = 0;
-  //  unsigned long int N = 0;
-  //  FILE *fd = NULL;
-
-  //  /* Check the numbers of the elements of the matrix */
-  //  N = matrix->height * matrix->width;
-
-  //  /* Check the integrity of the matrix */
-  //  if (N == 0 || matrix->rows == NULL) return 0;
-
-  //  /* Try to open file of floats */
-  //  if ((fd = fopen(filename, "rb")) == NULL) {
-  //    printf("Unable to open file %s\n", filename);
-  //    return 0;
-  //  }
-
-  //  float *nxt_a = matrix->rows;
-
-  //  for ( i = 0;
-  // i < N;
-  // i += 8, nxt_a += 8) {
-
-  // if (fread(nxt_a, sizeof(float), 8, fd) != 8) {
-  //            printf("Error reading from file %s: short read (less than 8 floats)\n", filename);
-  //            return 0;
-  // }
-  //  }
-
-  //  if (fd != NULL) fclose(fd);
-
-  //  return 1;
   int count = 0;
 
   FILE *file;
