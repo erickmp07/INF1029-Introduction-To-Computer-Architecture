@@ -1,5 +1,14 @@
+#include <cuda_runtime.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <immintrin.h>
+
 #define SUCESSO 1
 #define ERRO 0
+#define MAX_THREAD 1024
+#define MAX_BLOCK 65535
+#define DATASET_SIZE 1048576
 
 struct matrix
 {
