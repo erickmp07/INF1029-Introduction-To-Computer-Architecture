@@ -59,15 +59,15 @@ int alloc_matrix(struct matrix* m, int height, int width)
   
   m->height = height;
   m->width = width;
-  m->h_rows = (float *) malloc(height*width * sizeof(float));
+  m->h_rows = (float *) malloc(height * width * sizeof(float));
 
   if (m->h_rows == NULL) 
   { 
-    printf("Malloc error");
+    printf("Malloc error\n");
     return 0;
   }
 
-  cudaError = cudaMalloc(&(m->d_rows), DATASET_SIZE*sizeof(float));
+  cudaError = cudaMalloc(&(m->d_rows), DATASET_SIZE * sizeof(float));
 
   return cudaError != cudaSuccess
     ? 0
@@ -83,7 +83,7 @@ int load_matrix(struct matrix *matrix, char *filename)
   file = fopen(filename, "r");
   if (file == NULL)
   {
-    perror("Error opening file");
+    perror("Error opening file\n");
     return -1;
   }
 
@@ -131,7 +131,7 @@ int print_matrix(struct matrix *matrix)
   /* Check the integrity of the matrix */
   if (N == 0 || matrix->h_rows == NULL)
   {
-    printf("Matrix null");
+    printf("Matrix null\n\n");
     return 0;
   }
 
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
   //if (!initialize_matrix(&matrixA, 5.0f, 0.0f)) {
   if (!load_matrix(&matrixA, matrixA_filename))
   {
-    printf("%s: matrixA initialization problem.", argv[0]);
+    printf("%s: matrixA initialization problem.\n", argv[0]);
     return 1;
   }
 
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
   //if (!initialize_matrix(&matrixB, 1.0f, 0.0f)) {
   if (!load_matrix(&matrixB, matrixB_filename))
   {
-    printf("%s: matrixB initialization problem.", argv[0]);
+    printf("%s: matrixB initialization problem.\n", argv[0]);
     return 1;
   }
 
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
   alloc_matrix(&matrixC, DimA_M, DimB_N);
   if (!initialize_matrix(&matrixC, 0.0f, 0.0f)) 
   {
-    printf("%s: matrixC initialization problem.", argv[0]);
+    printf("%s: matrixC initialization problem.\n", argv[0]);
     return 1;
   }
 
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
   gettimeofday(&start, NULL);
   if (!scalar_matrix_mult(scalar_value, &matrixA))
   {
-    printf("%s: scalar_matrix_mult problem.", argv[0]);
+    printf("%s: scalar_matrix_mult problem.\n", argv[0]);
     return 1;
   }
   gettimeofday(&stop, NULL);
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
   printf("Writing first result: %s...\n", result1_filename);
   if (!store_matrix(&matrixA, result1_filename))
   {
-    printf("%s: failed to write first result to file.", argv[0]);
+    printf("%s: failed to write first result to file.\n", argv[0]);
     return 1;
   }
 
@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
   gettimeofday(&start, NULL);
   if (!matrix_matrix_mult(&matrixA, &matrixB, &matrixC))
   {
-    printf("%s: matrix_matrix_mult problem.", argv[0]);
+    printf("%s: matrix_matrix_mult problem.\n", argv[0]);
     return 1;
   }
   gettimeofday(&stop, NULL);
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
   printf("Writing second result: %s...\n", result2_filename);
   if (!store_matrix(&matrixC, result2_filename))
   {
-    printf("%s: failed to write second result to file.", argv[0]);
+    printf("%s: failed to write second result to file.\n", argv[0]);
     return 1;
   }
 
