@@ -70,12 +70,13 @@ int matrix_matrix_mult(struct matrix *matrixA, struct matrix *matrixB, struct ma
 
 int set_grid_size(int threads_per_block, int max_blocks_per_grid)
 {
-  if(threads_per_block < MAX_THREAD && max_blocks_per_grid < MAX_BLOCK){
-    global_n_block = threads_per_block;
-    global_n_thread = max_blocks_per_grid;
-
-    return SUCESSO;
+  if(threads_per_block > MAX_THREAD ||
+     max_blocks_per_grid > MAX_BLOCK) {
+    return ERRO;
   }
+
+  global_n_block = threads_per_block;
+  global_n_thread = max_blocks_per_grid;
   
-  return ERRO;
+  return SUCESSO;
 }
