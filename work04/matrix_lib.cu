@@ -17,6 +17,25 @@ void scalar_aux(int fim, float *rows, float scalar_value)
   }
 }
 
+__global__
+void matrix_matrix_mult_aux(int widthA, int widthB, int heightA, int heightB, float *d_rowsA, float *d_rowsB, float *d_rowsC)
+{
+  int i, j, index, step;
+
+  index = blockIdx.x * blockDim.x + threadIdx.x;
+  step = gridDim.x * gridDim.x;
+
+  for (i = index; i < heightA * widthB; i += step)
+  {
+    d_rowsC[i] = 0;
+
+    for (j = 0; j < widthA; j++)
+    {
+      d_rowsC[i] += d_rowsA[widthA * (i / heightA) + j] * d_rowsB[(i % heightA) + j * widthB];
+    }
+  }
+}
+
 int scalar_matrix_mult(float scalar_value, struct matrix *matrix)
 {
   if(matrix == NULL)
@@ -72,7 +91,50 @@ int scalar_matrix_mult(float scalar_value, struct matrix *matrix)
 
 int matrix_matrix_mult(struct matrix *matrixA, struct matrix *matrixB, struct matrix *matrixC)
 {
-    return SUCESSO;
+  int numBlocks;
+  int blockSize;
+  int matrixC_size;
+
+  if (matrixA == NULL ||
+      matrixB == NULL ||
+      matrixC == NULL)
+  {
+    return ERRO;
+  }
+
+  if (matrixA->d_rows == NULL ||
+      matrixB->d_rows == NULL ||
+      matrixC->d_rows == NULL)
+  {
+    return ERRO;
+  }
+
+  if (matrixA->width != matrixB->height)
+  {
+    return ERRO;
+  }
+
+  if (matrixA->height != matrixC->height ||
+      matrixB->width != matrixC->width)
+  {
+    return ERRO;
+  }
+
+  matrixC_size = matrixC->height * matrixC->width;
+
+  blockSize = global_n_thread;
+  numBlocks = (matrixC_size + blockSize - 1) / blockSize;
+    
+  if (numBlocks > global_n_block)
+  {
+    numBlocks = global_n_block;
+  }
+
+  matrix_matrix_mult_aux<<<numBlocks, blockSize>>>(matrixA->width, matrixB->width, matrixA->height, matrixB->height, matrixA->d_rows, matrixB->d_rows, matrixC->d_rows);
+  
+  cudaDeviceSynchronize();
+
+  return SUCESSO;
 }
 
 int set_grid_size(int threads_per_block, int max_blocks_per_grid)
