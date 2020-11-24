@@ -62,18 +62,17 @@ int aloc_matrix(struct matrix* m, int height, int width)
   m->width = width;
   m->h_rows = (float *) malloc(height*width * sizeof(float));
 
-  if (m->h_rows == NULL) { 
+  if (m->h_rows == NULL) 
+  { 
     printf("Malloc error");
     return 0;
   }
 
   cudaError = cudaMalloc(&(m->d_rows), DATASET_SIZE*sizeof(float));
 
-  if (cudaError != cudaSuccess) {
-    return 0;
-  }
-
-  return 1;
+  return cudaError != cudaSuccess
+    ? 0
+    : 1;
 }
 
 int load_matrix(struct matrix *matrix, char *filename)
@@ -257,7 +256,8 @@ int main(int argc, char *argv[])
   print_matrix(&matrixB);
 
   aloc_matrix(&matrixC, DimA_M, DimB_N);
-  if (!initialize_matrix(&matrixC, 0.0f, 0.0f)) {
+  if (!initialize_matrix(&matrixC, 0.0f, 0.0f)) 
+  {
     printf("%s: matrixC initialization problem.", argv[0]);
     return 1;
   }
