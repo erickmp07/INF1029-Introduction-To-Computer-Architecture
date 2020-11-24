@@ -56,7 +56,6 @@ int store_matrix(struct matrix *matrix, char *filename)
 int alloc_matrix(struct matrix* m, int height, int width)
 {
   cudaError_t cudaError;
-  m = (struct matrix*) malloc(sizeof(int) * 2 + sizeof(float) * (height*width) + (DATASET_SIZE * sizeof(float)));
   
   m->height = height;
   m->width = width;
