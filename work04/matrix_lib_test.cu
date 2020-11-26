@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
   //check_errors(&matrixA, 10.0f);
 
   /* Calculate the product between matrix A and matrix B */
-  printf("Executing matrix_matrix_mult(matrixA, mattrixB, matrixC)...\n");
+  printf("Executing matrix_matrix_mult(matrixA, matrixB, matrixC)...\n");
   gettimeofday(&start, NULL);
   if (!matrix_matrix_mult(&matrixA, &matrixB, &matrixC))
   {
