@@ -122,6 +122,22 @@ int matrix_matrix_mult(struct matrix *matrixA, struct matrix *matrixB, struct ma
 
   matrixC_size = matrixC->height * matrixC->width;
 
+  cudaError = cudaMemcpy(matrixA->d_rows, matrixA->h_rows, matrixA->height * matrixA->width * sizeof(float), cudaMemcpyHostToDevice);
+
+  if (cudaError != cudaSuccess) 
+  {
+    printf("cudaMemcpy (h -> d) returned error %s (code %d), line(%d)\n", cudaGetErrorString(cudaError), cudaError, __LINE__);
+    return ERRO;
+  }
+
+  cudaError = cudaMemcpy(matrixB->d_rows, matrixB->h_rows, matrixB->height * matrixB->width * sizeof(float), cudaMemcpyHostToDevice);
+
+  if (cudaError != cudaSuccess) 
+  {
+    printf("cudaMemcpy (h -> d) returned error %s (code %d), line(%d)\n", cudaGetErrorString(cudaError), cudaError, __LINE__);
+    return ERRO;
+  }
+
   blockSize = global_n_thread;
   numBlocks = (matrixC_size + blockSize - 1) / blockSize;
     
@@ -133,6 +149,15 @@ int matrix_matrix_mult(struct matrix *matrixA, struct matrix *matrixB, struct ma
   matrix_matrix_mult_aux<<<numBlocks, blockSize>>>(matrixA->width, matrixB->width, matrixA->height, matrixB->height, matrixA->d_rows, matrixB->d_rows, matrixC->d_rows);
   
   cudaDeviceSynchronize();
+
+  cudaError = cudaMemcpy(matrixC->h_rows, matrixC->d_rows, matrixC_size * sizeof(float), cudaMemcpyDeviceToHost);
+  
+  if (cudaError != cudaSuccess)
+  {
+    printf("cudaMemcpy (d -> h) returned error %s (code %d), line(%d)\n", cudaGetErrorString(cudaError), cudaError, __LINE__);
+    
+    return ERRO;
+  }
 
   return SUCESSO;
 }
